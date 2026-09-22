@@ -21,3 +21,7 @@ A responsive static website for The BLOOM Project, ready for GitHub Pages.
 - `script.js` — mobile menu + copyright year
 - `.nojekyll` — tells GitHub Pages to serve the static files directly
 - `assets/` — BLOOM images supplied for the project
+
+
+## Version 1.6 — Events Calendar
+A mobile-friendly Events section has been added with a month selector. October 2026 currently contains the BLOOM exhibition (Oct 1–31) and Opening Day (Oct 17). Add future events by copying an `event-card` in `index.html` and changing its `data-month`, date, title, location, description, and link.
