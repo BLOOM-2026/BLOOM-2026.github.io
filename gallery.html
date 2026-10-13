@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The BLOOM Project | Digital Gallery Book</title>
+<style>
+:root{--wine:#54233e;--purple:#432a56;--gold:#d9b66f;--paper:#fff9ed;--ink:#302338}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#291b32,#60334c);font-family:Georgia,serif;color:var(--paper);min-height:100vh}
+header{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}a{color:inherit}header a{text-decoration:none}header strong{letter-spacing:.12em;font-size:.9rem}
+main{max-width:1120px;margin:auto;padding:15px 16px 90px;text-align:center}h1{font-size:clamp(1.8rem,5vw,3.1rem);margin:.3em 0}.intro{opacity:.9}
+.book-shell{perspective:1800px;margin:30px auto 18px;max-width:950px}.book{display:flex;min-height:470px;box-shadow:0 20px 55px #100916aa;border-radius:6px;overflow:hidden;transition:transform .5s ease;transform-origin:left center}.book.cover{max-width:430px;min-height:530px;background:var(--wine);border:5px solid var(--gold);margin:auto;display:flex;align-items:center;justify-content:center;cursor:pointer}.book.cover:hover{transform:rotateY(-7deg)}
+.cover-inner{padding:28px}.flower{font-size:4rem;color:var(--gold)}.cover-inner h2{font-size:clamp(2.5rem,7vw,4.5rem);letter-spacing:.16em}.cover-inner p{line-height:1.7}.cover-inner .tap{border-top:1px solid var(--gold);padding-top:22px;margin-top:40px}
+.page{width:50%;background:var(--paper);color:var(--ink);padding:clamp(18px,3vw,36px);text-align:left;display:flex;flex-direction:column;justify-content:center;position:relative}.page:first-child{border-right:1px solid #dcc9ae;box-shadow:inset -9px 0 16px #cabba344}.page:last-child{box-shadow:inset 9px 0 16px #cabba344}
+.kicker{text-transform:uppercase;letter-spacing:.15em;font:700 .72rem system-ui;color:#82516b}.page h2{font-size:clamp(1.7rem,4vw,2.8rem);margin:.4em 0}.placeholder{border:2px dashed #b59b9f;background:#f2e9e5;color:#6d5b65;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;border-radius:4px;width:100%;font:600 .9rem system-ui;min-height:250px;padding:16px}.placeholder.art{min-height:330px}.placeholder span{font-size:2.4rem}.page button{border:0;background:var(--wine);color:white;border-radius:30px;padding:13px 20px;font-weight:700;cursor:pointer;margin-top:20px;align-self:flex-start}
+.controls{display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap}.controls button,.open-book{background:var(--gold);border:0;color:#2e1a2a;padding:13px 21px;border-radius:30px;font-weight:700;cursor:pointer}.controls button:disabled{opacity:.4;cursor:not-allowed}.support{position:fixed;right:14px;bottom:15px;background:var(--wine);border:2px solid var(--gold);border-radius:40px;padding:12px 17px;text-decoration:none;font:700 .85rem system-ui;z-index:5;box-shadow:0 3px 12px #0008}
+dialog{border:2px solid var(--gold);border-radius:12px;max-width:600px;width:calc(100% - 32px);padding:28px;background:var(--paper);color:var(--ink)}dialog::backdrop{background:#130d18d9}dialog h2{font-size:2rem}.close{float:right;background:var(--wine);color:white;border:0;padding:9px 14px;border-radius:20px;cursor:pointer}.note{font: .9rem/1.6 system-ui}
+@media(max-width:650px){.book{min-height:unset;display:block}.book.cover{min-height:450px}.page{width:100%;min-height:350px}.page:first-child{border-right:0;border-bottom:1px solid #dcc9ae}.placeholder{min-height:170px}.placeholder.art{min-height:230px}.support{bottom:10px;right:10px}main{padding-bottom:110px}}
+@media(prefers-reduced-motion:reduce){.book{transition:none}}
+</style></head><body>
+<header><a href="index.html"><strong>✦ THE BLOOM PROJECT</strong></a><a href="index.html">← Back to website</a></header>
+<main><p class="intro">THE SUN · THE SEED · THE SOIL</p><h1>Digital Gallery Book</h1><p class="intro">Eight creative voices. One evolving exhibition.</p>
+<div class="book-shell"><div id="book" class="book cover" role="region" aria-label="Digital exhibition book"></div></div>
+<div class="controls"><button id="prev" type="button">← Previous</button><span id="count" aria-live="polite"></span><button id="next" type="button">Next →</button></div>
+<p class="note">Artist portraits, biographies and artwork will be added as they become available. Select an artist's name to open their profile.</p>
+</main>
+<a class="support" href="support.html">♥ Help BLOOM Grow</a>
+<dialog id="profile" aria-labelledby="profile-title"><button class="close" id="close" type="button">Close ✕</button><p class="kicker">Meet the Artist</p><h2 id="profile-title"></h2><div class="placeholder"><span>◯</span>Artist portrait coming soon</div><p class="note"><strong>Biography:</strong> Coming soon.</p><p class="note"><strong>Artist statement:</strong> Coming soon.</p><p class="note"><strong>Artwork:</strong> Images and details coming soon.</p></dialog>
+<script>
+const artists=["Christine", "Kyra", "Natali", "James", "Jane", "Emra", "Zero", "Raquel"];
+let index=-1;
+const book=document.getElementById('book'), count=document.getElementById('count'),prev=document.getElementById('prev'),next=document.getElementById('next'),dialog=document.getElementById('profile');
+function render(){
+ if(index<0){book.className='book cover';book.innerHTML='<div class="cover-inner"><div class="flower">✿</div><h2>BLOOM</h2><p>The Sun, The Seed &amp; The Soil</p><p>A Digital Exhibition Gallery</p><p class="tap">Tap to open the book →</p></div>';book.onclick=()=>{index=0;render()};count.textContent='Cover';}
+ else if(index<artists.length){let n=artists[index];book.className='book';book.onclick=null;book.innerHTML=`<div class="page"><p class="kicker">Artist ${index+1} of ${artists.length}</p><div class="placeholder"><span>◯</span>Portrait placeholder</div><h2>${n}</h2><button type="button" id="meet">Meet ${n} →</button></div><div class="page"><p class="kicker">Featured artwork</p><div class="placeholder art"><span>✿</span>Artwork image placeholder</div><h2>Artwork Coming Soon</h2><p>Title · Medium · Year</p></div>`;document.getElementById('meet').onclick=()=>openProfile(n);count.textContent=`${index+1} / ${artists.length}`;}
+ else {book.className='book';book.onclick=null;book.innerHTML='<div class="page"><p class="kicker">Thank you</p><h2>Every story deserves to be seen.</h2><p>Thank you for exploring the artists of The BLOOM Project.</p></div><div class="page"><p class="kicker">Keep BLOOM Growing</p><h2>Art. Healing. Advocacy.</h2><p>Learn more about contributing or becoming a sponsor.</p><p><a href="support.html">Help BLOOM Grow →</a></p></div>';count.textContent='Closing pages'}
+ prev.disabled=index===-1;next.disabled=index===artists.length;next.textContent=index===-1?'Open Book →':index===artists.length-1?'Closing Pages →':'Next →';
+}
+function openProfile(name){document.getElementById('profile-title').textContent=name;dialog.showModal()}
+prev.onclick=()=>{index--;render()};next.onclick=()=>{index++;render()};document.getElementById('close').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});document.addEventListener('keydown',e=>{if(dialog.open)return;if(e.key==='ArrowRight'&&!next.disabled)next.click();if(e.key==='ArrowLeft'&&!prev.disabled)prev.click()});render();
+</script></body></html>
